@@ -1,3 +1,4 @@
+import { PlayerData, KEY_INGAME } from './GameDefine';
 cc.Class({
     extends: cc.Component,
 
@@ -17,6 +18,13 @@ cc.Class({
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
 
+    },
+
+    start () {
+        cc.log("PlayerControl start");
+        this.playerData = new PlayerData();
+        this.playerData.x = this.node.x;
+        this.websocketCtr = cc.find('Canvas/GameWorld').getComponent("WebsocketControl");
     },
 
 
@@ -45,29 +53,27 @@ cc.Class({
                 this.node.getComponent(cc.Animation).playAdditive('kick');
                 break;
         }
-
-        
     },
 
     onKeyUp (event) {
         switch(event.keyCode) {
             case cc.macro.KEY.a:
                 this.accLeft = false;
-                this.node.getComponent(cc.Animation).playAdditive('idle');
+                // this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
             case cc.macro.KEY.d:
                 this.accRight = false;
-                this.node.getComponent(cc.Animation).playAdditive('idle');
+                // this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
             case cc.macro.KEY.w:
                 var animState = this.node.getComponent(cc.Animation).getAnimationState('jump');
                 if (!animState.isPlaying)
-                this.node.getComponent(cc.Animation).playAdditive('idle');
+                // this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
             case cc.macro.KEY.space:
                 var animState = this.node.getComponent(cc.Animation).getAnimationState('kick');
                 if (!animState.isPlaying)
-                this.node.getComponent(cc.Animation).playAdditive('idle');
+                // this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
         }
     },
@@ -83,6 +89,17 @@ cc.Class({
         return this.node.runAction(cc.sequence(jumpUp, jumpDown));
     },
 
+    getInfo(type) {
+        this.playerData.x = this.node.x;
+        this.playerData.y = this.node.y;
+        if(this.websocketCtr != null) {
+            this.playerData.id = this.websocketCtr.playerDataMe.id;
+        }
+        
+        this.playerData.type = type;
+        return JSON.stringify(this.playerData);
+    },
+
 
     
     update: function (dt) {
@@ -91,6 +108,9 @@ cc.Class({
             this.node.x -= 10;
         } else if (this.accRight) {
             this.node.x += 10;
+        }
+        if(this.websocketCtr != null) {
+            this.websocketCtr.Send(this.getInfo(KEY_INGAME));
         }
     },
 });
