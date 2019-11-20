@@ -59,21 +59,21 @@ cc.Class({
         switch(event.keyCode) {
             case cc.macro.KEY.a:
                 this.accLeft = false;
-                this.node.getComponent(cc.Animation).playAdditive('idle');
+                // this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
             case cc.macro.KEY.d:
                 this.accRight = false;
-                this.node.getComponent(cc.Animation).playAdditive('idle');
+                // this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
             case cc.macro.KEY.w:
                 var animState = this.node.getComponent(cc.Animation).getAnimationState('jump');
                 if (!animState.isPlaying)
-                this.node.getComponent(cc.Animation).playAdditive('idle');
+                // this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
             case cc.macro.KEY.space:
                 var animState = this.node.getComponent(cc.Animation).getAnimationState('kick');
                 if (!animState.isPlaying)
-                this.node.getComponent(cc.Animation).playAdditive('idle');
+                // this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
         }
     },
