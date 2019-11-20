@@ -19,6 +19,7 @@ cc.Class({
     return cc.repeatForever(cc.sequence(jumpUp, jumpDown));
   },
   onLoad: function() {
+    rigidbody.applyForceToCenter (force);
     // initialize jump action
     // this.jumpAction = this.setJumpAction();
     // this.node.runAction(this.jumpAction);
