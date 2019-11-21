@@ -31,14 +31,14 @@ cc.Class({
     onKeyDown (event) {
         switch(event.keyCode) {
             case cc.macro.KEY.a:
-                var animState = this.node.getComponent(cc.Animation).getAnimationState('moveFoward');
-                if (!animState.isPlaying)
+                // var animState = this.node.getComponent(cc.Animation).getAnimationState('moveFoward');
+                // if (!animState.isPlaying)
                 this.node.getComponent(cc.Animation).playAdditive('moveFoward');
                 this.accLeft = true;
                 break;
             case cc.macro.KEY.d:
-                var animState = this.node.getComponent(cc.Animation).getAnimationState('moveBack');
-                if (!animState.isPlaying)
+                // var animState = this.node.getComponent(cc.Animation).getAnimationState('moveBack');
+                // if (!animState.isPlaying)
                 this.node.getComponent(cc.Animation).playAdditive('moveBack');
                 this.accRight = true;
                 break;
@@ -59,21 +59,21 @@ cc.Class({
         switch(event.keyCode) {
             case cc.macro.KEY.a:
                 this.accLeft = false;
-                // this.node.getComponent(cc.Animation).playAdditive('idle');
+                this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
             case cc.macro.KEY.d:
                 this.accRight = false;
-                // this.node.getComponent(cc.Animation).playAdditive('idle');
+                this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
             case cc.macro.KEY.w:
                 var animState = this.node.getComponent(cc.Animation).getAnimationState('jump');
                 if (!animState.isPlaying)
-                // this.node.getComponent(cc.Animation).playAdditive('idle');
+                this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
             case cc.macro.KEY.space:
                 var animState = this.node.getComponent(cc.Animation).getAnimationState('kick');
                 if (!animState.isPlaying)
-                // this.node.getComponent(cc.Animation).playAdditive('idle');
+                this.node.getComponent(cc.Animation).playAdditive('idle');
                 break;
         }
     },

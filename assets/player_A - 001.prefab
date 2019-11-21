@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "player_A - 001",
+    "_name": "player_A",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -61,7 +61,7 @@
       "__type__": "TypedArray",
       "ctor": "Float32Array",
       "array": [
-        -333,
+        -173,
         -113.39600372314453,
         0,
         0,
@@ -133,8 +133,8 @@
         0,
         0,
         0,
-        0.19985534250736237,
-        0.9798254370689392,
+        0,
+        1,
         1,
         1,
         1
@@ -144,7 +144,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 23.057
+      "z": 0
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -204,9 +204,9 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "4c980acb-8dac-4dd2-8f13-0c630d299806"
     },
-    "fileId": "b39rIWmgRFx4M5cxOvWIja",
+    "fileId": "4aF4HgAmZP5o1HmAkfvV4B",
     "sync": false
   },
   {
@@ -311,9 +311,9 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "4c980acb-8dac-4dd2-8f13-0c630d299806"
     },
-    "fileId": "c6/XqtSPZJoJiYLPy1WQ+/",
+    "fileId": "f9IRomCPhLu6YQkXvtvZtn",
     "sync": false
   },
   {
@@ -373,8 +373,8 @@
       },
       {
         "__type__": "cc.Vec2",
-        "x": -24.9,
-        "y": -21.9
+        "x": -16,
+        "y": -26
       },
       {
         "__type__": "cc.Vec2",
@@ -383,8 +383,8 @@
       },
       {
         "__type__": "cc.Vec2",
-        "x": -5.4,
-        "y": -52.3
+        "x": 5,
+        "y": -51
       },
       {
         "__type__": "cc.Vec2",
@@ -393,28 +393,28 @@
       },
       {
         "__type__": "cc.Vec2",
-        "x": 24,
-        "y": -82.2
+        "x": 25,
+        "y": -88
       },
       {
         "__type__": "cc.Vec2",
-        "x": 60.2,
-        "y": -93.1
+        "x": 44,
+        "y": -102
       },
       {
         "__type__": "cc.Vec2",
-        "x": 75.4,
-        "y": -81.9
+        "x": 64,
+        "y": -92
       },
       {
         "__type__": "cc.Vec2",
-        "x": 73.2,
-        "y": -67.3
+        "x": 62,
+        "y": -76
       },
       {
         "__type__": "cc.Vec2",
-        "x": 67.3,
-        "y": -63
+        "x": 58,
+        "y": -68
       },
       {
         "__type__": "cc.Vec2",
@@ -472,22 +472,24 @@
       "__id__": 1
     },
     "_enabled": true,
-    "_defaultClip": null,
+    "_defaultClip": {
+      "__uuid__": "f74b4b59-f4bc-4418-95b4-32d29fa4d37d"
+    },
     "_clips": [
       {
-        "__uuid__": "0892ee81-36e8-4b00-8e36-917f38535a7c"
+        "__uuid__": "ba9e8856-086e-4191-9c8e-9c5e1b57bc44"
       },
       {
-        "__uuid__": "a16b1e56-4393-4547-832d-7954fdacdbe6"
+        "__uuid__": "bbbea6d5-b275-4a1f-bc2c-9e414bfec119"
       },
       {
-        "__uuid__": "3cd43c3b-b36d-4cb8-a989-6445ef0e05ca"
+        "__uuid__": "be33d9f2-cacf-4e25-a382-833b645c64e7"
       },
       {
-        "__uuid__": "b0aa422e-7b19-4d6a-8b7e-58a31f385aa9"
+        "__uuid__": "34c06daf-e2e1-4f26-bda2-2260958cc06d"
       },
       {
-        "__uuid__": "d898cfc3-7350-4a45-baf6-b5b8af914108"
+        "__uuid__": "f74b4b59-f4bc-4418-95b4-32d29fa4d37d"
       }
     ],
     "playOnLoad": true,
@@ -499,9 +501,9 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "4c980acb-8dac-4dd2-8f13-0c630d299806"
     },
-    "fileId": "f8LXQrZwFDN59E04vNOb0U",
+    "fileId": "9aCKdJYo1E5IvYWk2bXNba",
     "sync": false
   }
 ]
