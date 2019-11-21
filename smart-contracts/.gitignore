@@ -13,6 +13,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.env
+yarn.lock
 build/contracts
 # client
 dappchain/
