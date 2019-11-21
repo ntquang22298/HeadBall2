@@ -644,9 +644,6 @@
       },
       {
         "__id__": 15
-      },
-      {
-        "__id__": 16
       }
     ],
     "_prefab": null,
@@ -739,7 +736,11 @@
     "_enabled": true,
     "duration": 0.1,
     "zoomScale": 1.2,
-    "clickEvents": [],
+    "clickEvents": [
+      {
+        "__id__": 16
+      }
+    ],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
     "_N$transition": 2,
@@ -802,14 +803,14 @@
     "_id": "9c3xSJQu9J6b9eoQV0DVfH"
   },
   {
-    "__type__": "03896K/FwBEEZyWpLdVp/pd",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 13
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 2
     },
-    "_enabled": true,
-    "_id": "98GEcS0FpMebigNYhCV8sO"
+    "component": "",
+    "_componentId": "712c3+m5jpDcJZTp1dcMr1H",
+    "handler": "playTx",
+    "customEventData": ""
   },
   {
     "__type__": "cc.Node",
@@ -869,8 +870,8 @@
       "__type__": "TypedArray",
       "ctor": "Float32Array",
       "array": [
-        0,
-        -338.06500244140625,
+        7.742000102996826,
+        -52.90399932861328,
         0,
         0,
         0,
@@ -1054,7 +1055,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 424.63,
+      "width": 403.4,
       "height": 50.4
     },
     "_anchorPoint": {
@@ -1119,7 +1120,7 @@
     "_useOriginalSize": false,
     "_string": "transaction confirming...",
     "_N$string": "transaction confirming...",
-    "_fontSize": 40,
+    "_fontSize": 38,
     "_lineHeight": 40,
     "_enableWrapText": true,
     "_N$file": null,
