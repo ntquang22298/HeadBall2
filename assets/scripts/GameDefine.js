@@ -70,9 +70,11 @@ var WebSocketPack = cc.Class({
 });
 
 const KEY_CONNECTED = "connected";
+const KEY_ENDGAME = "endgame";
 const KEY_READY = "ready";
 const KEY_INGAME = "ingame";
 const KEY_BALL = 'ball';
+const KEY_TIME = 'time';
 
 module.exports = {
   PlayerData,
@@ -81,5 +83,7 @@ module.exports = {
   KEY_READY,
   KEY_INGAME,
   KEY_BALL,
-  BallData
+  BallData,
+  KEY_ENDGAME,
+  KEY_TIME
 };

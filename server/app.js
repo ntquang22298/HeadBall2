@@ -18,13 +18,15 @@ class Room {
         this.playerA_Id = null;
         this.playerB_Id = null;
         this.total = 0;
-        this.created =  new Date();
+        this.startTime =  null;
     }
 }
 const KEY_CONNECTED = 'connected';
 const KEY_READY = 'ready';
 const KEY_INGAME = 'ingame';
 const KEY_BALL = 'ball';
+const KEY_ENDGAME = "endgame";
+const KEY_TIME = 'time';
 
 const wss = new WebSocket.Server({ port: 8080 })
 let users = {};
@@ -86,12 +88,12 @@ wss.on('connection', function connection(ws) {
 
     let roomPlayer = listRoom.find(room => room.id === player.idRoom)
     
-    console.log('----------Room Player--------------',roomPlayer);
+    console.log('----------Room Player--------------',listRoom);
     
 
     if (roomPlayer.total == 2) {
-        var playerA_Id = listRoom.find(room => room.id === player.idRoom).playerA_Id
-        var playerB_Id = listRoom.find(room => room.id === player.idRoom).playerB_Id
+        var playerA_Id = roomPlayer.playerA_Id
+        var playerB_Id = roomPlayer.playerB_Id
 
         // Player
         users[playerA_Id].ws.send(JSON.stringify({
@@ -124,8 +126,20 @@ wss.on('connection', function connection(ws) {
             'key' : KEY_CONNECTED,
             'type' : 'RIVAL_BALL',
         })); 
+
+        countDown(users[playerA_Id].ws, users[playerB_Id].ws);
+
+        var indexRoom = listRoom.indexOf(roomPlayer);
+        // listRoom[indexRoom].startTime = new Date();
+        setTimeout(function() {
+            endGame(users[playerA_Id].ws, users[playerB_Id].ws);
+            listRoom.splice(indexRoom,1);
+            console.log('----------Room Player--------------',listRoom);
+        }, 6000);
     } 
 
+    
+    
     ws.on('message', data => {
         console.log(data);
         
@@ -185,4 +199,35 @@ wss.on('connection', function connection(ws) {
         console.log(code);
     });
 });
+
+
+endGame = (wsA, wsB) => {
+    wsA.send(JSON.stringify({
+        'key' : KEY_ENDGAME,
+        'node':null
+    })); 
+    wsB.send(JSON.stringify({
+        'key' : KEY_ENDGAME,
+        'node':null
+    })); 
+}
+
+
+countDown = (wsA,wsB) => {
+    var time = 6;
+    var downloadTimer = setInterval(function(){
+        time -= 1;
+        wsA.send(JSON.stringify({
+            'key' : KEY_TIME,
+            'time': time
+        })); 
+        wsB.send(JSON.stringify({
+            'key' : KEY_TIME,
+            'time': time
+        })); 
+        if(time <= 0){
+            clearInterval(downloadTimer);
+        }
+    }, 1000);
+}
 

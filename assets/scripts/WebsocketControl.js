@@ -1,4 +1,4 @@
-import { PlayerData, KEY_CONNECTED, KEY_READY, KEY_INGAME,KEY_BALL } from './GameDefine';
+import { PlayerData, KEY_CONNECTED, KEY_READY, KEY_INGAME,KEY_BALL,KEY_ENDGAME,KEY_TIME } from './GameDefine';
 import PalyerA from './PlayerA';
 
 cc.Class({
@@ -11,6 +11,7 @@ cc.Class({
         this.playerDataMe = null;
         this.playerDataRivel = null;
         this.ballData = null;
+        this.resultBoard = null;
     },
     properties: {
         prefab_Player: { 
@@ -27,6 +28,10 @@ cc.Class({
             default: null,
             type: cc.Prefab
         },
+        prefab_ResultBoard: {
+            default: null,
+            type: cc.Prefab
+        },
         scoreDisplayA: {
             default: null,
             type: cc.Label
@@ -39,7 +44,6 @@ cc.Class({
             default: null,
             type: cc.Label
         }
-
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -54,7 +58,7 @@ cc.Class({
 
     start () {
         // this.websocket = new WebSocket("ws://127.0.0.1:8080");
-        this.websocket = new WebSocket("ws://192.168.19.16:8080");
+        this.websocket = new WebSocket("ws://192.168.19.28:8080");
         var self = this;
         this.websocket.onopen = function (evt) {
             // cc.log(evt);
@@ -94,27 +98,42 @@ cc.Class({
                     self.node.addChild(self.ballData.node);
                 }
                 if(playerdata.type == KEY_INGAME) {
-                    // console.log(`data rivel: x=${playerdata.x}`);
+                    console.log(`data rivel: x=${playerdata.x}`);
                     self.playerDataRivel.x = playerdata.x;
                 }
                 if(playerdata.type == KEY_BALL) {
-                    // console.log(`data ball: x=${playerdata.x}, y=${playerdata.y}`);
+                    console.log(`data ball: x=${playerdata.x}, y=${playerdata.y}`);
                     self.ballData.x = playerdata.x;
+                    self.node.addChild(self.ballData.node);
                 }
             }
-            for(let i = 0 ; i < playerdata.length; i ++) {
-                if(playerdata[i].id != null && playerdata[i].id == self.playerDataRivel.id) {
-                    self.playerDataRivel.node.x = playerdata[i].x;
-                    self.playerDataRivel.node.y = playerdata[i].y;
-                    
-                    self.playerDataRivel.node.rotationX = playerdata[i].rotationX;
-                    // console.log(self.playerDataRivel.node.x);
-                }
+            if (playerdata.key == KEY_TIME) {
+                console.log('---------Time--------',playerdata.time);
+                
+                self.updateMatchTime(playerdata.time);
+            }
+            if(playerdata.key != undefined && playerdata.key == KEY_ENDGAME) {
+                cc.director.pause();
 
-                if(playerdata[i].playerId != null && playerdata[i].playerId == self.ballData.playerId) {
-                    self.ballData.node.x = playerdata[i].x;
-                    self.ballData.node.y = playerdata[i].y;
-                    // console.log(self.ballData.node.x);
+                self.resultBoard = playerdata;
+                self.resultBoard.node = cc.instantiate(self.prefab_ResultBoard);
+                self.node.addChild(self.resultBoard.node);
+                var goHome = cc.find('Canvas/goHome');
+                goHome.destroy();
+            }
+            if(playerdata.type == KEY_INGAME || playerdata.type == KEY_BALL) {
+                for(let i = 0 ; i < playerdata.length; i ++) {
+                    if(self.playerDataRivel && playerdata[i].id != null && playerdata[i].id == self.playerDataRivel.id) {
+                        self.playerDataRivel.node.x = playerdata[i].x;
+                        self.playerDataRivel.node.y = playerdata[i].y;
+                        console.log(self.playerDataRivel.node.x);
+                    }
+
+                    if(playerdata[i].playerId != null && playerdata[i].playerId == self.ballData.playerId) {
+                        self.ballData.node.x = playerdata[i].x;
+                        self.ballData.node.y = playerdata[i].y;
+                        console.log(self.ballData.node.x);
+                    }
                 }
             }
         };
@@ -127,9 +146,9 @@ cc.Class({
     },
     
     update (dt) {
-        if(this.isConnected == false) 
+        if(this.isConnected == false)
             return;
-        if(this.ballData.node.x >= 490 && this.ballData.node.y <= 0){
+        if(this.ballData && this.ballData.node.x >= 490 && this.ballData.node.y <= 0){
             this.gainScoreA();
             this.ballData.node.destroy();
             this.playerDataMe.node.destroy();
@@ -137,7 +156,7 @@ cc.Class({
             this.start();
             
         } 
-        if(this.ballData.node.x <= -500 && this.ballData.node.y <= 0 ){
+        if(this.ballData && this.ballData.node.x <= -500 && this.ballData.node.y <= 0 ){
             this.gainScoreB();
             this.ballData.node.destroy();
             this.playerDataMe.node.destroy();
@@ -156,9 +175,8 @@ cc.Class({
         // update the words of the scoreDisplay Label
         this.scoreDisplayB.string =  this.scoreB;
     },
-    updateMatchTime: function (){
-        this.matchTime.string = this.count;
-        this.count -= 1;
+    updateMatchTime: function (time){
+        this.matchTime.string = time;
     },
     Send(data) {
         if(this.websocket != null && this.isConnected == true)
