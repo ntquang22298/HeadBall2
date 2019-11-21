@@ -6,7 +6,7 @@ cc.Class({
         this.node.on('touchend', function () {
             var websocketCtr = cc.find('Canvas/GameWorld').getComponent("WebsocketControl");
             if (websocketCtr) {
-                websocketCtr.CloseWS();
+                websocketCtr.closeWS();
             }
             cc.director.resume();
             cc.director.loadScene('Home');

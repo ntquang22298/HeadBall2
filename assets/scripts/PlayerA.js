@@ -110,7 +110,7 @@ cc.Class({
             this.node.x += 10;
         }
         if(this.websocketCtr != null) {
-            this.websocketCtr.Send(this.getInfo(KEY_INGAME));
+            this.websocketCtr.sendData(this.getInfo(KEY_INGAME));
         }
     },
 });

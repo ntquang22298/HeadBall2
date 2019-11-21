@@ -41,7 +41,7 @@ cc.Class({
 
   update (dt) {
     if(this.websocketCtr != null) {
-      this.websocketCtr.Send(this.getInfo(KEY_BALL));
+      this.websocketCtr.sendData(this.getInfo(KEY_BALL));
     }
   },
 });

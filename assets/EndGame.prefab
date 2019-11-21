@@ -187,7 +187,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
     },
     "fileId": "48p9tdUCRPM7usQ9hUONM9",
     "sync": false
@@ -362,7 +362,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
     },
     "fileId": "5dq7nmkOxHqKAiHWNkCDAK",
     "sync": false
@@ -405,7 +405,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
     },
     "fileId": "d1j96ea3JGa5TphKXLKFBN",
     "sync": false
@@ -580,7 +580,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
     },
     "fileId": "2bax8jHzFFk67ubbSptRbR",
     "sync": false
@@ -623,7 +623,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
     },
     "fileId": "c4wlfFfvZLfYE+hFK/u86S",
     "sync": false
@@ -798,7 +798,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
     },
     "fileId": "91vAVXq0xBSZosyP+hVHSG",
     "sync": false
@@ -841,7 +841,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
     },
     "fileId": "dcXGcjMdxAg4j5fm827FYh",
     "sync": false
@@ -1023,7 +1023,7 @@
     "_id": ""
   },
   {
-    "__type__": "da403KTHbhAsL6CXrAF7ztf",
+    "__type__": "221feXiL5xJio68HHDSksLP",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -1038,7 +1038,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
     },
     "fileId": "6dHIlYE01KL5A3ew4Thza/",
     "sync": false
@@ -1049,7 +1049,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
     },
     "fileId": "50OBtNNDBGtYL2ZhgYFi5w",
     "sync": false

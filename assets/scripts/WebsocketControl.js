@@ -31,6 +31,18 @@ cc.Class({
         prefab_ResultBoard: {
             default: null,
             type: cc.Prefab
+        },
+        scoreDisplayA: {
+            default: null,
+            type: cc.Label
+        },
+        scoreDisplayB: {
+            default: null,
+            type: cc.Label
+        },
+        matchTime: {
+            default: null,
+            type: cc.Label
         }
     },
 
@@ -96,10 +108,9 @@ cc.Class({
                 }
             }
             if (playerdata.key == KEY_TIME) {
-                var Time = cc.find('Canvas/scoreboard/Time');
-                console.log('----------Time------',Time);
+                console.log('---------Time--------',playerdata.time);
                 
-                Time.label.string = "Time";
+                self.updateMatchTime(playerdata.time);
             }
             if(playerdata.key != undefined && playerdata.key == KEY_ENDGAME) {
                 cc.director.pause();
@@ -135,9 +146,9 @@ cc.Class({
     },
     
     update (dt) {
-        if(this.isConnected == false) 
+        if(this.isConnected == false)
             return;
-        if(this.ballData.node.x >= 490 && this.ballData.node.y <= 0){
+        if(this.ballData && this.ballData.node.x >= 490 && this.ballData.node.y <= 0){
             this.gainScoreA();
             this.ballData.node.destroy();
             this.playerDataMe.node.destroy();
@@ -145,7 +156,7 @@ cc.Class({
             this.start();
             
         } 
-        if(this.ballData.node.x <= -500 && this.ballData.node.y <= 0 ){
+        if(this.ballData && this.ballData.node.x <= -500 && this.ballData.node.y <= 0 ){
             this.gainScoreB();
             this.ballData.node.destroy();
             this.playerDataMe.node.destroy();
@@ -164,12 +175,14 @@ cc.Class({
         // update the words of the scoreDisplay Label
         this.scoreDisplayB.string =  this.scoreB;
     },
-    updateMatchTime: function (){
-        this.matchTime.string = this.count;
-        this.count -= 1;
+    updateMatchTime: function (time){
+        this.matchTime.string = time;
     },
-    Send(data) {
+    sendData(data) {
         if(this.websocket != null && this.isConnected == true)
         this.websocket.send(data);
+    },
+    closeWS(){
+        this.websocket.close();
     }
 });
