@@ -26,6 +26,18 @@ cc.Class({
         prefab_Ball: {
             default: null,
             type: cc.Prefab
+        },
+        scoreDisplayA: {
+            default: null,
+            type: cc.Label
+        },
+        scoreDisplayB: {
+            default: null,
+            type: cc.Label
+        },
+        matchTime: {
+            default: null,
+            type: cc.Label
         }
 
     },
@@ -34,11 +46,15 @@ cc.Class({
 
     onLoad () {
         cc.director.getPhysicsManager().enabled = true;
+        this.scoreA = 0;
+        this.scoreB = 0;
+        this.count = 180;
+
     },
 
     start () {
         // this.websocket = new WebSocket("ws://127.0.0.1:8080");
-        this.websocket = new WebSocket("ws://192.168.19.28:8080");
+        this.websocket = new WebSocket("ws://192.168.19.16:8080");
         var self = this;
         this.websocket.onopen = function (evt) {
             // cc.log(evt);
@@ -46,7 +62,7 @@ cc.Class({
         };
 
         this.websocket.onmessage = function (evt) {
-            console.log('data: ' + evt.data);
+            // console.log('data: ' + evt.data);
             let playerdata = JSON.parse(evt.data);
             if(playerdata.key != undefined && playerdata.key == KEY_CONNECTED) {
                 if(playerdata.type == 'ME'){
@@ -68,7 +84,8 @@ cc.Class({
                         self.playerDataRivel.node.scaleX *= -1; 
                     }
                     self.node.addChild(self.playerDataRivel.node);
-                    console.log(`rival: ${self.playerDataMe.id} vs ${self.playerDataRivel.id}` );
+
+                    // console.log(`rival: ${self.playerDataMe.id} vs ${self.playerDataRivel.id}` );
                 }
                 if (playerdata.type == 'RIVAL_BALL') {
                     // Ball
@@ -77,11 +94,11 @@ cc.Class({
                     self.node.addChild(self.ballData.node);
                 }
                 if(playerdata.type == KEY_INGAME) {
-                    console.log(`data rivel: x=${playerdata.x}`);
+                    // console.log(`data rivel: x=${playerdata.x}`);
                     self.playerDataRivel.x = playerdata.x;
                 }
                 if(playerdata.type == KEY_BALL) {
-                    console.log(`data ball: x=${playerdata.x}, y=${playerdata.y}`);
+                    // console.log(`data ball: x=${playerdata.x}, y=${playerdata.y}`);
                     self.ballData.x = playerdata.x;
                 }
             }
@@ -89,13 +106,15 @@ cc.Class({
                 if(playerdata[i].id != null && playerdata[i].id == self.playerDataRivel.id) {
                     self.playerDataRivel.node.x = playerdata[i].x;
                     self.playerDataRivel.node.y = playerdata[i].y;
-                    console.log(self.playerDataRivel.node.x);
+                    
+                    self.playerDataRivel.node.rotationX = playerdata[i].rotationX;
+                    // console.log(self.playerDataRivel.node.x);
                 }
 
                 if(playerdata[i].playerId != null && playerdata[i].playerId == self.ballData.playerId) {
                     self.ballData.node.x = playerdata[i].x;
                     self.ballData.node.y = playerdata[i].y;
-                    console.log(self.ballData.node.x);
+                    // console.log(self.ballData.node.x);
                 }
             }
         };
@@ -106,12 +125,41 @@ cc.Class({
         }
         
     },
-
+    
     update (dt) {
         if(this.isConnected == false) 
             return;
-    },
+        if(this.ballData.node.x >= 490 && this.ballData.node.y <= 0){
+            this.gainScoreA();
+            this.ballData.node.destroy();
+            this.playerDataMe.node.destroy();
+            this.playerDataRivel.node.destroy();
+            this.start();
+            
+        } 
+        if(this.ballData.node.x <= -500 && this.ballData.node.y <= 0 ){
+            this.gainScoreB();
+            this.ballData.node.destroy();
+            this.playerDataMe.node.destroy();
+            this.playerDataRivel.node.destroy();
+            this.start();
 
+        }
+    },
+    gainScoreA: function () {
+        this.scoreA += 1;
+        // update the words of the scoreDisplay Label
+        this.scoreDisplayA.string =  this.scoreA;
+    },
+    gainScoreB: function () {
+        this.scoreB += 1;
+        // update the words of the scoreDisplay Label
+        this.scoreDisplayB.string =  this.scoreB;
+    },
+    updateMatchTime: function (){
+        this.matchTime.string = this.count;
+        this.count -= 1;
+    },
     Send(data) {
         if(this.websocket != null && this.isConnected == true)
         this.websocket.send(data);
