@@ -9,6 +9,14 @@ var PlayerData = cc.Class({
       default: 0,
       type: cc.Float
     },
+    y: {
+      default: 0,
+      type: cc.Float
+    },
+    angle: {
+      default: 0,
+      type: cc.Float
+    },
     key: {
       default: "",
       type: cc.string
@@ -37,6 +45,10 @@ var BallData = cc.Class({
       },
       y : {
           default: 0,
+          type: cc.Float
+      },
+      angle: {
+        default: 0,
           type: cc.Float
       },
       key : {

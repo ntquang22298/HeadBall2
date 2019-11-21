@@ -195,7 +195,7 @@
       "array": [
         0,
         0,
-        426.0845031738281,
+        418.290283203125,
         0,
         0,
         0,
@@ -1802,13 +1802,13 @@
     },
     "_enabled": true,
     "prefab_Player": {
-      "__uuid__": "4c980acb-8dac-4dd2-8f13-0c630d299806"
+      "__uuid__": "92099f0a-b2eb-41b1-9707-959d456c0ba2"
     },
     "prefab_Me": {
       "__uuid__": "ebe57246-a23f-4261-8703-e1275dfb7e32"
     },
     "prefab_Ball": {
-      "__uuid__": "18a3ca84-a54e-4412-b233-3f96fbe14c38"
+      "__uuid__": "f473309e-17e1-4c15-9ae0-bb976c65e82a"
     },
     "prefab_ResultBoard": {
       "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"

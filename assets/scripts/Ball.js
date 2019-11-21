@@ -32,6 +32,7 @@ cc.Class({
   getInfo(type) {
     this.ballData.x = this.node.x;
     this.ballData.y = this.node.y;
+    this.ballData.angle = this.node.angle;
     if(this.websocketCtr != null) {
       this.ballData.playerId = this.websocketCtr.playerDataMe.id;
     }

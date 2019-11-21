@@ -91,7 +91,7 @@ wss.on('connection', function connection(ws) {
     console.log('----------Room Player--------------',listRoom);
     
 
-    if (roomPlayer.total == 2) {
+    if (roomPlayer.total == 2 ) {
         var playerA_Id = roomPlayer.playerA_Id
         var playerB_Id = roomPlayer.playerB_Id
 
@@ -135,7 +135,7 @@ wss.on('connection', function connection(ws) {
             endGame(users[playerA_Id].ws, users[playerB_Id].ws);
             listRoom.splice(indexRoom,1);
             console.log('----------Room Player--------------',listRoom);
-        }, 6000);
+        }, 30000);
     } 
 
     
@@ -214,7 +214,7 @@ endGame = (wsA, wsB) => {
 
 
 countDown = (wsA,wsB) => {
-    var time = 6;
+    var time = 30;
     var downloadTimer = setInterval(function(){
         time -= 1;
         wsA.send(JSON.stringify({
