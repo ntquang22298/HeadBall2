@@ -1,0 +1,11 @@
+{
+  "name": "headball-contracts",
+  "version": "1.0.0",
+  "description": "smart contracts of headball",
+  "main": "index.js",
+  "author": "dotrungkien",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "truffle-hdwallet-provider": "^1.0.17"
+  }
+}
