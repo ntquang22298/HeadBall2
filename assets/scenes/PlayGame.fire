@@ -1801,7 +1801,9 @@
       "__id__": 36
     },
     "_enabled": true,
-    "prefab_Player": null,
+    "prefab_Player": {
+      "__uuid__": "4c980acb-8dac-4dd2-8f13-0c630d299806"
+    },
     "prefab_Me": {
       "__uuid__": "ebe57246-a23f-4261-8703-e1275dfb7e32"
     },
@@ -1810,6 +1812,15 @@
     },
     "prefab_ResultBoard": {
       "__uuid__": "316bb62c-0f64-47e3-8405-8d5084f1adc0"
+    },
+    "scoreDisplayA": {
+      "__id__": 28
+    },
+    "scoreDisplayB": {
+      "__id__": 26
+    },
+    "matchTime": {
+      "__id__": 34
     },
     "_id": "f2NlntVy1KCKu9V7Enp6kT"
   },
@@ -2372,14 +2383,14 @@
     "_id": "68AFMpeWJHE7OEB+GbK3yM"
   },
   {
-    "__type__": "da403KTHbhAsL6CXrAF7ztf",
+    "__type__": "221feXiL5xJio68HHDSksLP",
     "_name": "",
     "_objFlags": 0,
     "node": {
       "__id__": 46
     },
     "_enabled": true,
-    "_id": "d7c5aqs7lPt7q76xZ0n46H"
+    "_id": "6aafHGBU5A2Z14RFESlWDS"
   },
   {
     "__type__": "cc.Canvas",
