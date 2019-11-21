@@ -178,8 +178,11 @@ cc.Class({
     updateMatchTime: function (time){
         this.matchTime.string = time;
     },
-    Send(data) {
+    sendData(data) {
         if(this.websocket != null && this.isConnected == true)
         this.websocket.send(data);
+    },
+    closeWS(){
+        this.websocket.close();
     }
 });
