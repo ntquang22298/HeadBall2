@@ -1,6 +1,6 @@
 const HUDController = require("HUDController");
 const Web3 = require("web3.min");
-const PRICE_PER_OPEN = "1"; //finney
+const PLAY_TURN_PRICE = "10"; //finney
 const GAS_PRICE_DEFAULT = "20000000000";
 
 const Web3Controller = cc.Class({
@@ -112,56 +112,61 @@ const Web3Controller = cc.Class({
   //   });
   // },
 
-  // playTx() {
-  //   this.txConfirm.active = true;
-  //   this.playButton.active = false;
-  //   this.Contract.methods
-  //     .play()
-  //     .send({
-  //       from: this.CurrentAccount,
-  //       value: this.Web3.utils.toWei(PRICE_PER_OPEN, "finney"),
-  //       gas: 250000,
-  //       gasPrice: GAS_PRICE_DEFAULT
-  //     })
-  //     .on("transactionHash", hash => {
-  //       console.log("transactionHash: ", hash);
-  //     })
-  //     .on("receipt", receipt => {
-  //       console.log("receipt: ", receipt);
-  //       this.updateBalance();
-  //       this.startGame();
-  //       this.txConfirm.active = false;
-  //       this.playButton.active = true;
-  //     })
-  //     .on("error", error => {
-  //       console.error("play error: ", error);
-  //       this.txConfirm.active = false;
-  //       this.playButton.active = true;
-  //     });
-  // },
+  playTx() {
+    this.txConfirm.active = true;
+    this.playButton.active = false;
+    this.Contract.methods
+      .play()
+      .send({
+        from: this.CurrentAccount,
+        value: this.Web3.utils.toWei(PLAY_TURN_PRICE, "finney"),
+        gas: 250000,
+        gasPrice: GAS_PRICE_DEFAULT
+      })
+      .on("transactionHash", hash => {
+        console.log("transactionHash: ", hash);
+      })
+      .on("receipt", receipt => {
+        console.log("receipt: ", receipt);
+        this.updateBalance();
+        this.startGame();
+        this.txConfirm.active = false;
+        this.playButton.active = true;
+      })
+      .on("error", error => {
+        console.error("play error: ", error);
+        this.txConfirm.active = false;
+        this.playButton.active = true;
+      });
+  },
 
-  // endGameTx(score) {
-  //   this.txConfirm.active = true;
-  //   this.Contract.methods
-  //     .endGame(score)
-  //     .send({
-  //       from: this.CurrentAccount,
-  //       gas: 250000,
-  //       gasPrice: GAS_PRICE_DEFAULT
-  //     })
-  //     .on("transactionHash", hash => {
-  //       console.log("transactionHash: ", hash);
-  //     })
-  //     .on("receipt", receipt => {
-  //       console.log("receipt: ", receipt);
-  //       this.updateBalance();
-  //       this.txConfirm.active = false;
-  //     })
-  //     .on("error", error => {
-  //       console.error("endgame error: ", error);
-  //       this.txConfirm.active = false;
-  //     });
-  // },
+  endGameTx(result) {
+    this.txConfirm.active = true;
+    this.Contract.methods
+      .endGame(result)
+      .send({
+        from: this.CurrentAccount,
+        gas: 250000,
+        gasPrice: GAS_PRICE_DEFAULT
+      })
+      .on("transactionHash", hash => {
+        console.log("transactionHash: ", hash);
+      })
+      .on("receipt", receipt => {
+        console.log("receipt: ", receipt);
+        this.updateBalance();
+        this.txConfirm.active = false;
+      })
+      .on("error", error => {
+        console.error("endgame error: ", error);
+        this.txConfirm.active = false;
+      });
+  },
+
+  startGame() {
+    console.log("======START GAME======");
+    cc.director.loadScene("PlayGame");
+  },
 
   fromWei(value) {
     return parseInt(this.Web3.utils.fromWei(value, "ether"));
