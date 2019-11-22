@@ -1,5 +1,6 @@
 const WebSocket = require("ws");
 const uuidv1 = require("uuid/v1");
+const url = require("url");
 
 class PlayerData {
   constructor(id, x) {
@@ -20,7 +21,7 @@ class Room {
     this.scoreA = 0;
     this.scoreB = 0;
     this.total = 0;
-    this.startTime = null;
+    this.time = 0;
   }
 }
 const KEY_CONNECTED = "connected";
@@ -30,14 +31,21 @@ const KEY_BALL = "ball";
 const KEY_ENDGAME = "endgame";
 const KEY_TIME = "time";
 const KEY_GOAL = "goal";
-const KEY_SCORE = "score";
 
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocket.Server({ port: 8081 });
 let users = {};
 let listRoom = [];
 
-wss.on("connection", function connection(ws) {
-  let player = new PlayerData(uuidv1(), 0);
+wss.on("connection", function connection(ws, req) {
+  var infor = url.parse(req.url, true).query;
+  let player = null;
+  if (infor.address != "null") {
+    player = new PlayerData(infor.address, 0);
+  } else {
+    player = new PlayerData(uuidv1(), 0);
+  }
+  console.log(player);
+
   player.ws = ws;
   player.key = KEY_CONNECTED;
 
@@ -73,7 +81,7 @@ wss.on("connection", function connection(ws) {
 
   users[player.id] = player;
 
-  console.log("--------- LIST ROOM ----------", listRoom);
+  // console.log("--------- LIST ROOM ----------", listRoom);
 
   ws.send(
     JSON.stringify({
@@ -86,14 +94,14 @@ wss.on("connection", function connection(ws) {
     })
   );
 
-  console.log("____________________");
-  console.log("| client++: " + player.id + " connected");
-  console.log("| size : " + Object.keys(users).length);
-  console.log("____________________");
+  // console.log("____________________");
+  // console.log("| client++: " + player.id + " connected");
+  // console.log("| size : " + Object.keys(users).length);
+  // console.log("____________________");
 
   let roomPlayer = listRoom.find(room => room.id === player.idRoom);
 
-  console.log("----------Room Player--------------", listRoom);
+  // console.log("----------Room Player--------------", listRoom);
 
   if (roomPlayer.total == 2) {
     var playerA_Id = roomPlayer.playerA_Id;
@@ -139,41 +147,37 @@ wss.on("connection", function connection(ws) {
       })
     );
 
-    countDown(users[playerA_Id].ws, users[playerB_Id].ws);
-
-    var indexRoom = listRoom.indexOf(roomPlayer);
     // listRoom[indexRoom].startTime = new Date();
-    setTimeout(function() {
       endGame(users[playerA_Id].ws, users[playerB_Id].ws, listRoom[indexRoom]);
       listRoom.splice(indexRoom, 1);
-      console.log("----------Room Player--------------", listRoom);
+      // console.log("----------Room Player--------------", listRoom);
     }, 20000);
   }
 
   ws.on("message", data => {
-    console.log(data);
+    // console.log(data);
 
     let playerdata = JSON.parse(data);
     if (playerdata.type == KEY_READY) {
-      console.log(`Received message form client: => ${data}`);
+      // console.log(`Received message form client: => ${data}`);
     }
     let pack = new Array();
+    var indexRoom = listRoom.indexOf(roomPlayer);
     if (
       playerdata.type == KEY_INGAME ||
       playerdata.type == KEY_BALL ||
       playerdata.type == KEY_GOAL
     ) {
-      console.log("sent: ");
-      console.log(playerdata);
+      // console.log("sent: ");
+      // console.log(playerdata);
       var userInRoom = [
         users[roomPlayer.playerA_Id],
         users[roomPlayer.playerB_Id]
       ];
       if (playerdata.type == KEY_GOAL) {
-        var indexRoom = listRoom.indexOf(roomPlayer);
         listRoom[indexRoom].scoreA = playerdata.scoreA;
         listRoom[indexRoom].scoreB = playerdata.scoreB;
-        console.log(listRoom[indexRoom]);
+        // console.log(listRoom[indexRoom]);
         for (let id in userInRoom) {
           userInRoom[id].ws.send(
             JSON.stringify({
@@ -189,15 +193,15 @@ wss.on("connection", function connection(ws) {
           if (user) {
             if (playerdata.type == KEY_INGAME) {
               user.type = KEY_INGAME;
-              // pack.push(playerdata);
+              pack.push(playerdata);
             }
             if (playerdata.type == KEY_BALL) {
               user.type = KEY_BALL;
-              // if (playerdata.playerId == roomPlayer.playerA_Id) {
-              //   pack.push(playerdata);
-              // }
+              if (playerdata.playerId == roomPlayer.playerA_Id) {
+                pack.push(playerdata);
+              }
             }
-            pack.push(playerdata);
+            // pack.push(playerdata);
           }
         }
         for (let id in userInRoom) {
@@ -212,23 +216,33 @@ wss.on("connection", function connection(ws) {
   });
 
   ws.on("close", message => {
-    console.log("close .. ");
-    console.log(message);
-    console.log(wss.clients.length);
+    // console.log("close .. ");
+    // console.log(message);
+    // console.log(wss.clients.length);
 
     for (let obj in users) {
-      console.log(obj);
+      // console.log(obj);
       if (users[obj].ws == ws) {
-        console.log("remove client --");
+        // console.log("remove client --");
         delete users[obj];
         break;
       }
     }
-    console.log("clients size : " + Object.keys(users).length);
+
+    var indexRoom = listRoom.indexOf(roomPlayer);
+    if (listRoom[indexRoom]) {
+      listRoom[indexRoom].total -= 1;
+      if (listRoom[indexRoom].total == 0) {
+        listRoom.splice(indexRoom, 1);
+      }
+    }
+    console.log("----------- Room -----------", listRoom);
+
+    // console.log("clients size : " + Object.keys(users).length);
   });
 
   ws.on("error", function(code, reason) {
-    console.log(code);
+    // console.log(code);
   });
 });
 
@@ -250,15 +264,13 @@ endGame = (wsA, wsB, room) => {
     })
   );
   //---------- Ket Qua --------
-  console.log('+------ KET QUA -----+');
+  console.log("+------ KET QUA -----+");
   console.log(`| A - ${room.id} : ${room.scoreA} `);
   console.log(`| B - ${room.id}: ${room.scoreB}`);
-  console.log('+--------------------+');
-
-  
+  console.log("+--------------------+");
 };
 
-countDown = (wsA, wsB) => {
+countDown = (wsA, wsB, roomId) => {
   var time = 20;
   var downloadTimer = setInterval(function() {
     time -= 1;
@@ -277,5 +289,6 @@ countDown = (wsA, wsB) => {
     if (time <= 0) {
       clearInterval(downloadTimer);
     }
+    let roomPlayer = listRoom.find(room => room.id === roomId);
   }, 1000);
 };

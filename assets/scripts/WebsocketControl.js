@@ -6,12 +6,10 @@ import {
   KEY_BALL,
   KEY_ENDGAME,
   KEY_TIME,
-  KEY_GOAL,
-  KEY_SCORE
+  KEY_GOAL
 } from "./GameDefine";
 import PalyerA from "./PlayerA";
-
-cc.Class({
+const WebsocketControl = cc.Class({
   extends: cc.Component,
 
   ctor: function() {
@@ -22,6 +20,7 @@ cc.Class({
     this.playerDataRivel = null;
     this.ballData = null;
     this.resultBoard = null;
+    this.address = null;
   },
   properties: {
     prefab_Player: {
@@ -55,6 +54,9 @@ cc.Class({
       type: cc.Label
     }
   },
+  statics: {
+    instance: null
+  },
 
   // LIFE-CYCLE CALLBACKS:
 
@@ -62,11 +64,13 @@ cc.Class({
     cc.director.getPhysicsManager().enabled = true;
     this.scoreA = 0;
     this.scoreB = 0;
+    WebsocketControl.instance = this;
   },
-
   start() {
     // this.websocket = new WebSocket("ws://127.0.0.1:8080");
-    this.websocket = new WebSocket("ws://192.168.19.28:8080");
+    this.websocket = new WebSocket(
+      `ws://139.162.40.88:8081/?address=${this.address}`
+    );
     var self = this;
     this.websocket.onopen = function(evt) {
       // cc.log(evt);
@@ -84,6 +88,8 @@ cc.Class({
             self.playerDataMe.node.x = 150;
             self.playerDataMe.node.scaleX *= -1;
           }
+          console.log("Me: ", self.playerDataMe);
+
           self.node.addChild(self.playerDataMe.node);
           console.log("connect succes to server");
         }
@@ -126,7 +132,7 @@ cc.Class({
           .updateScore(playerdata.scoreA, playerdata.scoreB);
 
         var goHome = cc.find("Canvas/goHome");
-        goHome.destroy();
+        goHome.active = false;
       }
 
       if (!playerdata.key) {
@@ -139,6 +145,10 @@ cc.Class({
           ) {
             self.playerDataRivel.node.x = playerdata[i].x;
             self.playerDataRivel.node.y = playerdata[i].y;
+            let playerB = self.playerDataRivel.node.getComponent("PlayerB");
+            playerB.onKeyD(playerdata[i].onKeyD);
+            playerB.onKeyU(playerdata[i].onKeyU);
+
             // self.playerDataRivel.node.angle = playerdata[i].angle;
             // console.log(self.playerDataRivel.node);
           }
@@ -213,9 +223,11 @@ cc.Class({
     this.matchTime.string = time;
   },
   restPlayer() {
-    this.ballData.node.getComponent('Ball').resetState();
-    this.playerDataMe.node.getComponent('PlayerA').resetState();
-    this.playerDataRivel.node.getComponent('PlayerB').resetState();
+    cc.director.pause();
+    this.ballData.node.getComponent("Ball").resetState();
+    this.playerDataMe.node.getComponent("PlayerA").resetState();
+    this.playerDataRivel.node.getComponent("PlayerB").resetState();
+    cc.director.resume();
   },
   sendData(data) {
     if (this.websocket != null && this.isConnected == true)

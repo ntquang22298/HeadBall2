@@ -35,37 +35,36 @@ var PlayerData = cc.Class({
 var BallData = cc.Class({
   name: "BallData",
   properties: {
-      playerId : {
-          default: '',
-          type: cc.string
-      },
-      x : {
-          default: 0,
-          type: cc.Float
-      },
-      y : {
-          default: 0,
-          type: cc.Float
-      },
-      angle: {
-        default: 0,
-          type: cc.Float
-      },
-      key : {
-          default: '',
-          type: cc.string
-      },
-      type : {
-          default: '',
-          type: cc.string
-      },
-      node : {
-          default : null,
-          type: cc.Node
-
-      },
-  },
-})
+    playerId: {
+      default: "",
+      type: cc.string
+    },
+    x: {
+      default: 0,
+      type: cc.Float
+    },
+    y: {
+      default: 0,
+      type: cc.Float
+    },
+    angle: {
+      default: 0,
+      type: cc.Float
+    },
+    key: {
+      default: "",
+      type: cc.string
+    },
+    type: {
+      default: "",
+      type: cc.string
+    },
+    node: {
+      default: null,
+      type: cc.Node
+    }
+  }
+});
 
 var WebSocketPack = cc.Class({
   name: "WebSocketPack",
@@ -85,9 +84,9 @@ const KEY_CONNECTED = "connected";
 const KEY_ENDGAME = "endgame";
 const KEY_READY = "ready";
 const KEY_INGAME = "ingame";
-const KEY_BALL = 'ball';
-const KEY_TIME = 'time';
-const KEY_GOAL = 'goal';
+const KEY_BALL = "ball";
+const KEY_TIME = "time";
+const KEY_GOAL = "goal";
 const KEY_SCORE = "score";
 
 module.exports = {

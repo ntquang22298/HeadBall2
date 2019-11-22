@@ -20,6 +20,12 @@ cc.Class({
 
     this.originPosX = this.node.x;
     this.originPosY = this.node.y;
+
+    this.onKeyD = null;
+    this.onKeyU = null;
+  },
+  getOriginPosX() {
+    return this.originPosX;
   },
 
   start() {
@@ -34,18 +40,17 @@ cc.Class({
   onKeyDown(event) {
     switch (event.keyCode) {
       case cc.macro.KEY.a:
-        // var animState = this.node.getComponent(cc.Animation).getAnimationState('moveFoward');
-        // if (!animState.isPlaying)
+        this.onKeyD = "a";
         this.node.getComponent(cc.Animation).playAdditive("moveFoward");
         this.accLeft = true;
         break;
       case cc.macro.KEY.d:
-        // var animState = this.node.getComponent(cc.Animation).getAnimationState('moveBack');
-        // if (!animState.isPlaying)
+        this.onKeyD = "d";
         this.node.getComponent(cc.Animation).playAdditive("moveBack");
         this.accRight = true;
         break;
       case cc.macro.KEY.w:
+        this.onKeyD = "w";
         var animState = this.node
           .getComponent(cc.Animation)
           .getAnimationState("jump");
@@ -53,6 +58,7 @@ cc.Class({
           this.node.getComponent(cc.Animation).playAdditive("jump");
         break;
       case cc.macro.KEY.space:
+        this.onKeyD = "space";
         var animState = this.node
           .getComponent(cc.Animation)
           .getAnimationState("kick");
@@ -65,27 +71,31 @@ cc.Class({
   onKeyUp(event) {
     switch (event.keyCode) {
       case cc.macro.KEY.a:
+        this.onKeyU = "a";
         this.accLeft = false;
-        // this.node.getComponent(cc.Animation).playAdditive('idle');
+        this.node.getComponent(cc.Animation).playAdditive("idle");
         break;
       case cc.macro.KEY.d:
+        this.onKeyU = "d";
         this.accRight = false;
-        // this.node.getComponent(cc.Animation).playAdditive('idle');
+        this.node.getComponent(cc.Animation).playAdditive("idle");
         break;
       case cc.macro.KEY.w:
+        this.onKeyU = "w";
         var animState = this.node
           .getComponent(cc.Animation)
           .getAnimationState("jump");
-        if (!animState.isPlaying)
-          // this.node.getComponent(cc.Animation).playAdditive('idle');
-          break;
+        if (animState.isPlaying)
+          this.node.getComponent(cc.Animation).playAdditive("idle");
+        break;
       case cc.macro.KEY.space:
+        this.onKeyU = "space";
         var animState = this.node
           .getComponent(cc.Animation)
           .getAnimationState("kick");
-        if (!animState.isPlaying)
-          // this.node.getComponent(cc.Animation).playAdditive('idle');
-          break;
+        if (animState.isPlaying)
+          this.node.getComponent(cc.Animation).playAdditive("idle");
+        break;
     }
   },
 
@@ -108,6 +118,10 @@ cc.Class({
   getInfo(type) {
     this.playerData.x = this.node.x;
     this.playerData.y = this.node.y;
+    this.playerData.onKeyD = this.onKeyD;
+    this.onKeyD = null;
+    this.playerData.onKeyU = this.onKeyU;
+    this.onKeyU = null;
     if (this.websocketCtr != null) {
       this.playerData.id = this.websocketCtr.playerDataMe.id;
     }
