@@ -5,7 +5,9 @@ import {
   KEY_INGAME,
   KEY_BALL,
   KEY_ENDGAME,
-  KEY_TIME
+  KEY_TIME,
+  KEY_GOAL,
+  KEY_SCORE
 } from "./GameDefine";
 import PalyerA from "./PlayerA";
 
@@ -20,9 +22,6 @@ cc.Class({
     this.playerDataRivel = null;
     this.ballData = null;
     this.resultBoard = null;
-    this.playerMeStart = null;
-    this.playerRivelStart = null;
-    this.ballStart = null;
   },
   properties: {
     prefab_Player: {
@@ -63,7 +62,6 @@ cc.Class({
     cc.director.getPhysicsManager().enabled = true;
     this.scoreA = 0;
     this.scoreB = 0;
-    this.count = 180;
   },
 
   start() {
@@ -107,20 +105,15 @@ cc.Class({
           self.ballData.node = cc.instantiate(self.prefab_Ball);
           self.node.addChild(self.ballData.node);
         }
-        if (playerdata.type == KEY_INGAME) {
-          console.log(`data rivel: x=${playerdata.x}`);
-          self.playerDataRivel.x = playerdata.x;
-        }
-        if (playerdata.type == KEY_BALL) {
-          console.log(`data ball: x=${playerdata.x}, y=${playerdata.y}`);
-          self.ballData.x = playerdata.x;
-          self.node.addChild(self.ballData.node);
-        }
       }
       if (playerdata.key == KEY_TIME) {
         console.log("---------Time--------", playerdata.time);
-
         self.updateMatchTime(playerdata.time);
+      }
+      if (playerdata.key == KEY_GOAL) {
+        self.restPlayer();
+        self.scoreDisplayA.string = playerdata.scoreA;
+        self.scoreDisplayB.string = playerdata.scoreB;
       }
       if (playerdata.key != undefined && playerdata.key == KEY_ENDGAME) {
         cc.director.pause();
@@ -128,6 +121,10 @@ cc.Class({
         self.resultBoard = playerdata;
         self.resultBoard.node = cc.instantiate(self.prefab_ResultBoard);
         self.node.addChild(self.resultBoard.node);
+        self.resultBoard.node
+          .getComponent("ResultBoard")
+          .updateScore(playerdata.scoreA, playerdata.scoreB);
+
         var goHome = cc.find("Canvas/goHome");
         goHome.destroy();
       }
@@ -135,18 +132,20 @@ cc.Class({
       if (!playerdata.key) {
         for (let i = 0; i < playerdata.length; i++) {
           if (
-            self.playerDataRivel.node &&
+            self.playerDataRivel &&
+            cc.isValid(self.playerDataRivel.node) &&
             playerdata[i].id != null &&
             playerdata[i].id == self.playerDataRivel.id
           ) {
             self.playerDataRivel.node.x = playerdata[i].x;
             self.playerDataRivel.node.y = playerdata[i].y;
             // self.playerDataRivel.node.angle = playerdata[i].angle;
-            self.playerDataRivel.node.angle = 1.5;
             // console.log(self.playerDataRivel.node);
           }
 
           if (
+            self.ballData &&
+            cc.isValid(self.ballData.node) &&
             playerdata[i].playerId != null &&
             playerdata[i].playerId == self.ballData.playerId
           ) {
@@ -168,22 +167,36 @@ cc.Class({
   update(dt) {
     if (this.isConnected == false) return;
     if (
-        this.ballData && cc.isValid(this.ballData.node) &&
+      this.ballData &&
+      cc.isValid(this.ballData.node) &&
       this.ballData.node.x >= 490 &&
       this.ballData.node.y <= 0
     ) {
-      this.gainScoreA();
       this.restPlayer();
-      //   this.start();
+      this.gainScoreA();
+      this.websocket.send(
+        JSON.stringify({
+          type: KEY_GOAL,
+          scoreA: this.scoreA,
+          scoreB: this.scoreB
+        })
+      );
     }
     if (
-        this.ballData && cc.isValid(this.ballData.node) &&
+      this.ballData &&
+      cc.isValid(this.ballData.node) &&
       this.ballData.node.x <= -500 &&
       this.ballData.node.y <= 0
     ) {
-      this.gainScoreB();
       this.restPlayer();
-      //   this.start();
+      this.gainScoreB();
+      this.websocket.send(
+        JSON.stringify({
+          type: KEY_GOAL,
+          scoreA: this.scoreA,
+          scoreB: this.scoreB
+        })
+      );
     }
   },
   gainScoreA: function() {
@@ -199,10 +212,10 @@ cc.Class({
   updateMatchTime: function(time) {
     this.matchTime.string = time;
   },
-  restPlayer: function() {
-    this.ballData.node.destroy();
-    this.playerDataMe.node.destroy();
-    this.playerDataRivel.node.destroy();
+  restPlayer() {
+    this.ballData.node.getComponent('Ball').resetState();
+    this.playerDataMe.node.getComponent('PlayerA').resetState();
+    this.playerDataRivel.node.getComponent('PlayerB').resetState();
   },
   sendData(data) {
     if (this.websocket != null && this.isConnected == true)
