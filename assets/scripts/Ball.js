@@ -22,6 +22,8 @@ cc.Class({
   onLoad: function() {
     this.ballData = null;
     this.websocketCtr = null;
+    this.originPosX = this.node.x;
+    this.originPosY = this.node.y;
   },
 
   start() {
@@ -32,11 +34,20 @@ cc.Class({
   getInfo(type) {
     this.ballData.x = this.node.x;
     this.ballData.y = this.node.y;
+    this.ballData.angle = this.node.angle;
     if(this.websocketCtr != null) {
       this.ballData.playerId = this.websocketCtr.playerDataMe.id;
     }
     this.ballData.type = type;
     return JSON.stringify(this.ballData);
+  },
+  resetState() {
+    this.node.x = this.originPosX;
+    this.node.y = this.originPosY;
+    this.getComponent(cc.RigidBody).linearVelocity = cc.v2(0,0);
+    this.getComponent(cc.RigidBody).linearDamping = 0;
+    this.getComponent(cc.RigidBody).angularDamping = 0;
+    this.getComponent(cc.RigidBody).angularVelocity =0;
   },
 
   update (dt) {

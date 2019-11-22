@@ -9,6 +9,14 @@ var PlayerData = cc.Class({
       default: 0,
       type: cc.Float
     },
+    y: {
+      default: 0,
+      type: cc.Float
+    },
+    angle: {
+      default: 0,
+      type: cc.Float
+    },
     key: {
       default: "",
       type: cc.string
@@ -37,6 +45,10 @@ var BallData = cc.Class({
       },
       y : {
           default: 0,
+          type: cc.Float
+      },
+      angle: {
+        default: 0,
           type: cc.Float
       },
       key : {
@@ -75,6 +87,8 @@ const KEY_READY = "ready";
 const KEY_INGAME = "ingame";
 const KEY_BALL = 'ball';
 const KEY_TIME = 'time';
+const KEY_GOAL = 'goal';
+const KEY_SCORE = "score";
 
 module.exports = {
   PlayerData,
@@ -85,5 +99,7 @@ module.exports = {
   KEY_BALL,
   BallData,
   KEY_ENDGAME,
-  KEY_TIME
+  KEY_TIME,
+  KEY_GOAL,
+  KEY_SCORE
 };
