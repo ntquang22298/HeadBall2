@@ -147,7 +147,11 @@ wss.on("connection", function connection(ws, req) {
       })
     );
 
+    countDown(users[playerA_Id].ws, users[playerB_Id].ws, roomPlayer.id);
+
+    var indexRoom = listRoom.indexOf(roomPlayer);
     // listRoom[indexRoom].startTime = new Date();
+    setTimeout(function() {
       endGame(users[playerA_Id].ws, users[playerB_Id].ws, listRoom[indexRoom]);
       listRoom.splice(indexRoom, 1);
       // console.log("----------Room Player--------------", listRoom);
