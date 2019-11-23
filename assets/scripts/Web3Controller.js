@@ -1,5 +1,4 @@
 const HUDController = require("HUDController");
-const WebsocketControl = require("WebsocketControl");
 const Web3 = require("web3.min");
 const PLAY_TURN_PRICE = "10"; //finney
 const GAS_PRICE_DEFAULT = "20000000000";
@@ -163,14 +162,15 @@ const Web3Controller = cc.Class({
         this.txConfirm.active = false;
       });
   },
+
   startGame(address) {
     console.log("======START GAME======");
     cc.director.loadScene("PlayGame", function(err, data) {
       var loginNode = cc.director.getScene();
-      var containerLogin = (loginNode
+      loginNode
         .getChildByName("Canvas")
         .getChildByName("GameWorld")
-        .getComponent("WebsocketControl").address = address);
+        .getComponent("WebsocketControl").address = address;
     });
   },
 
