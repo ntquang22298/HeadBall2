@@ -1,4 +1,5 @@
 const HUDController = require("HUDController");
+const WebsocketControl = require("WebsocketControl");
 const Web3 = require("web3.min");
 const PLAY_TURN_PRICE = "10"; //finney
 const GAS_PRICE_DEFAULT = "20000000000";
@@ -129,7 +130,7 @@ const Web3Controller = cc.Class({
       .on("receipt", receipt => {
         console.log("receipt: ", receipt);
         this.updateBalance();
-        this.startGame();
+        this.startGame(this.CurrentAccount);
         this.txConfirm.active = false;
         this.playButton.active = true;
       })
@@ -162,10 +163,15 @@ const Web3Controller = cc.Class({
         this.txConfirm.active = false;
       });
   },
-
-  startGame() {
+  startGame(address) {
     console.log("======START GAME======");
-    cc.director.loadScene("PlayGame");
+    cc.director.loadScene("PlayGame", function(err, data) {
+      var loginNode = cc.director.getScene();
+      var containerLogin = (loginNode
+        .getChildByName("Canvas")
+        .getChildByName("GameWorld")
+        .getComponent("WebsocketControl").address = address);
+    });
   },
 
   fromWei(value) {
