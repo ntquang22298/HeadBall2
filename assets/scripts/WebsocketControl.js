@@ -148,7 +148,6 @@ const WebsocketControl = cc.Class({
             let playerB = self.playerDataRivel.node.getComponent("PlayerB");
             playerB.onKeyD(playerdata[i].onKeyD);
             playerB.onKeyU(playerdata[i].onKeyU);
-
             // self.playerDataRivel.node.angle = playerdata[i].angle;
             // console.log(self.playerDataRivel.node);
           }
