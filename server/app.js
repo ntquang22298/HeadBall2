@@ -256,7 +256,10 @@ endGame = (wsA, wsB, room) => {
       key: KEY_ENDGAME,
       scoreA: room.scoreA,
       scoreB: room.scoreB,
-      node: null
+      node: null,
+      addressA: room.playerA_Id,
+      addressB: room.playerB_Id
+
     })
   );
   wsB.send(
@@ -264,13 +267,16 @@ endGame = (wsA, wsB, room) => {
       key: KEY_ENDGAME,
       scoreA: room.scoreA,
       scoreB: room.scoreB,
-      node: null
+      node: null,
+      addressA: room.playerA_Id,
+      addressB: room.playerB_Id
+
     })
   );
   //---------- Ket Qua --------
   console.log("+------ KET QUA -----+");
-  console.log(`| A - ${room.id} : ${room.scoreA} `);
-  console.log(`| B - ${room.id}: ${room.scoreB}`);
+  console.log(`| A - ${room.playerA_Id} : ${room.scoreA} `);
+  console.log(`| B - ${room.playerB_Id}: ${room.scoreB}`);
   console.log("+--------------------+");
 };
 

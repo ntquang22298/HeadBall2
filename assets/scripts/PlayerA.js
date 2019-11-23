@@ -33,7 +33,7 @@ cc.Class({
     this.playerData = new PlayerData();
     this.playerData.x = this.node.x;
     this.websocketCtr = cc
-      .find("Canvas/GameWorld")
+      .find("Canvas")
       .getComponent("WebsocketControl");
   },
 

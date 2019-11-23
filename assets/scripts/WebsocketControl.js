@@ -8,14 +8,15 @@ import {
   KEY_TIME,
   KEY_GOAL
 } from "./GameDefine";
-import PalyerA from "./PlayerA";
+import PlayerA from "./PlayerA";
+const Web3Controller = require("./Web3Controller");
 const WebsocketControl = cc.Class({
   extends: cc.Component,
 
   ctor: function() {
     this.websocket = null;
     this.isConnected = false;
-    this.player = PalyerA;
+    this.player = PlayerA;
     this.playerDataMe = null;
     this.playerDataRivel = null;
     this.ballData = null;
@@ -61,16 +62,19 @@ const WebsocketControl = cc.Class({
   // LIFE-CYCLE CALLBACKS:
 
   onLoad() {
-    cc.director.getPhysicsManager().enabled = true;
+   cc.director.getPhysicsManager().enabled = true;
     this.scoreA = 0;
     this.scoreB = 0;
     WebsocketControl.instance = this;
+
+    
   },
   start() {
-    // this.websocket = new WebSocket("ws://127.0.0.1:8080");
-    this.websocket = new WebSocket(
-      `ws://139.162.40.88:8081/?address=${this.address}`
-    );
+
+    this.websocket = new WebSocket(`ws://127.0.0.1:8081/?address=${this.address}`);
+    // this.websocket = new WebSocket(
+    //   `ws://139.162.40.88:8081/?address=${this.address}`
+    // );
     var self = this;
     this.websocket.onopen = function(evt) {
       // cc.log(evt);
@@ -122,7 +126,7 @@ const WebsocketControl = cc.Class({
         self.scoreDisplayB.string = playerdata.scoreB;
       }
       if (playerdata.key != undefined && playerdata.key == KEY_ENDGAME) {
-        cc.director.pause();
+       cc.director.pause();
 
         self.resultBoard = playerdata;
         self.resultBoard.node = cc.instantiate(self.prefab_ResultBoard);
@@ -130,7 +134,24 @@ const WebsocketControl = cc.Class({
         self.resultBoard.node
           .getComponent("ResultBoard")
           .updateScore(playerdata.scoreA, playerdata.scoreB);
+        if(playerdata.scoreA != playerdata.scoreB){
+          console.log('data' ,playerdata);
+          console.log('data' ,self.address);
 
+
+          if(playerdata.scoreA > playerdata.scoreB && playerdata.addressA == self.address){
+            console.log('address',self.address);
+            
+           Web3Controller.instance.endGameTx(1);
+          }else if(playerdata.scoreB > playerdata.scoreA && playerdata.addressB == self.address){
+            Web3Controller.instance.endGameTx(1);
+
+          }else{
+            Web3Controller.instance.endGameTx(2);
+          }
+        }else{
+          Web3Controller.instance.getComponent("Web3Controller").endGameTx(0);
+        }
         var goHome = cc.find("Canvas/goHome");
         goHome.active = false;
       }
@@ -222,11 +243,11 @@ const WebsocketControl = cc.Class({
     this.matchTime.string = time;
   },
   restPlayer() {
-    cc.director.pause();
+   cc.director.pause();
     this.ballData.node.getComponent("Ball").resetState();
     this.playerDataMe.node.getComponent("PlayerA").resetState();
     this.playerDataRivel.node.getComponent("PlayerB").resetState();
-    cc.director.resume();
+   cc.director.resume();
   },
   sendData(data) {
     if (this.websocket != null && this.isConnected == true)

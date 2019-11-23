@@ -141,7 +141,7 @@ const Web3Controller = cc.Class({
   },
 
   endGameTx(result) {
-    this.txConfirm.active = true;
+    // this.txConfirm.active = true;
     this.Contract.methods
       .endGame(result)
       .send({
@@ -155,11 +155,11 @@ const Web3Controller = cc.Class({
       .on("receipt", receipt => {
         console.log("receipt: ", receipt);
         this.updateBalance();
-        this.txConfirm.active = false;
+        // this.txConfirm.active = false;
       })
       .on("error", error => {
         console.error("endgame error: ", error);
-        this.txConfirm.active = false;
+        // this.txConfirm.active = false;
       });
   },
 
