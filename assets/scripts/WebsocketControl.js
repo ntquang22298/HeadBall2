@@ -71,7 +71,7 @@ const WebsocketControl = cc.Class({
   },
   start() {
 
-    this.websocket = new WebSocket(`ws://127.0.0.1:8081/?address=${this.address}`);
+    this.websocket = new WebSocket(`ws://192.168.19.16:8081/?address=${this.address}`);
     // this.websocket = new WebSocket(
     //   `ws://139.162.40.88:8081/?address=${this.address}`
     // );
@@ -141,16 +141,25 @@ const WebsocketControl = cc.Class({
 
           if(playerdata.scoreA > playerdata.scoreB && playerdata.addressA == self.address){
             console.log('address',self.address);
-            
+            self.resultBoard.node
+            .getComponent("ResultBoard")
+            .updateResult(1);
            Web3Controller.instance.endGameTx(1);
           }else if(playerdata.scoreB > playerdata.scoreA && playerdata.addressB == self.address){
             Web3Controller.instance.endGameTx(1);
-
+            self.resultBoard.node
+            .getComponent("ResultBoard")
+            .updateResult(1);
           }else{
-            Web3Controller.instance.endGameTx(2);
+            self.resultBoard.node
+            .getComponent("ResultBoard")
+            .updateResult(3);
           }
         }else{
           Web3Controller.instance.getComponent("Web3Controller").endGameTx(0);
+          self.resultBoard.node
+          .getComponent("ResultBoard")
+          .updateResult(2);
         }
         var goHome = cc.find("Canvas/goHome");
         goHome.active = false;

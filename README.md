@@ -45,8 +45,8 @@ truffle migrate --reset --network rinkeby
 
 ### Build Game
 
-- Install Cocos Creator: https://www.cocos.com/en/creator (this game was built by version 2.1.13, use higher version may lead to lost metadata when open scene).
-- Open project, you will see 2 scene: `entrance` and `game`
+- Install Cocos Creator: https://www.cocos.com/en/creator (this game was built by version 2.2.0, use higher version may lead to lost metadata when open scene).
+- Open project, you will see 2 scene: `Home` and `PlayGame`
 - All connection beetween game and blockchain was implemented in class `Web3Controller`, in case you want to use your own smart contract, change the `ContractABI` inside the `Web3Controller` component.
 - Select `Browser` and run it.
 - If you want to publish anywhere on internet, built it and deploy on your server. References here: https://docs.cocos2d-x.org/creator/manual/en/publish/publish-web.html

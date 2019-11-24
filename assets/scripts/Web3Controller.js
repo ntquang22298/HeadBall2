@@ -169,7 +169,6 @@ const Web3Controller = cc.Class({
       var loginNode = cc.director.getScene();
       loginNode
         .getChildByName("Canvas")
-        .getChildByName("GameWorld")
         .getComponent("WebsocketControl").address = address;
     });
   },

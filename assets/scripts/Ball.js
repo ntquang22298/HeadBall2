@@ -28,7 +28,7 @@ cc.Class({
 
   start() {
     this.ballData = new BallData();
-    this.websocketCtr = cc.find('Canvas/GameWorld').getComponent("WebsocketControl");
+    this.websocketCtr = cc.find('Canvas').getComponent("WebsocketControl");
   },
 
   getInfo(type) {
